@@ -2,9 +2,17 @@
 
 pragma solidity 0.8.30;
 
+contract Consumer {
+    function getBalance() public view returns (uint) {
+        return address(this).balance;
+    }
+
+    function deposit() public payable {}
+}
+
 contract SmartContractWallet {
 
-    address payable owner;
+    address payable public owner;
 
     mapping(address => uint) public allowance;
     mapping(address => bool) public isAllowedToSend;
@@ -42,7 +50,7 @@ contract SmartContractWallet {
 
     function setAllowance(address _for, uint _amount) public {
         require(msg.sender == owner, "You are not the owner, aborting");
-        allowance[msg.sender] = _amount;
+        allowance[_for] = _amount;
 
         if (_amount > 0) {
             isAllowedToSend[_for] = true;
